@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% block title %}Nossa Equipe · InovaAcess{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('equipe.static', filename='css/equipe.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="equipe-hero">
+  <div class="container">
+    <h1>Nosso Time</h1>
+    <p>Mais que uma equipe — somos uma família movida por propósito, criatividade e amor pelo que fazemos. Cada um de nós contribui com talento e coração para tornar o mundo mais acessível e conectado.</p>
+  </div>
+</section>
+
+<!-- 1) Missão e Valores vem primeiro -->
+<section class="equipe-valores">
+  <div class="container">
+    <h2>Nossa Missão e Valores</h2>
+    <div class="valores-grid">
+      <div class="valor">
+        <h3>💡 Inovação</h3>
+        <p>Buscamos constantemente novas formas de promover acessibilidade por meio da tecnologia e do design.</p>
+      </div>
+      <div class="valor">
+        <h3>❤️ Inclusão</h3>
+        <p>Respeitamos e valorizamos as diferenças, acreditando que a diversidade é o coração da inovação.</p>
+      </div>
+      <div class="valor">
+        <h3>🌎 Impacto</h3>
+        <p>Nossos projetos geram mudanças reais na vida das pessoas e nas organizações que abraçam a acessibilidade.</p>
+      </div>
+      <div class="valor">
+        <h3>🤝 Humanidade</h3>
+        <p>Cada ação é guiada pela empatia e pelo desejo genuíno de servir, entender e transformar realidades.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2) Depois mostra a equipe -->
+<section class="equipe-grid">
+  <div class="container">
+    <h2>Quem Faz Acontecer</h2>
+    <p class="intro">Profissionais que acreditam que empatia e tecnologia caminham juntas.</p>
+
+    <div class="cards">
+      <article class="card">
+        <img src="{{ url_for('equipe.static', filename='img/anthony.jpg') }}" alt="Foto de Anthony — Desenvolvedor">
+        <h3>Anthony Barroso</h3>
+        <p class="role">Desenvolvedor</p>
+        <p>Responsável por transformar ideias em código funcional. Apaixonado por inovação, acessibilidade e boas interfaces — o cérebro por trás do sistema que faz tudo funcionar.</p>
+      </article>
+
+      <article class="card">
+        <img src="{{ url_for('equipe.static', filename='img/fellipe.png') }}" alt="Foto de Feellipe — Vendas e Relacionamento">
+        <h3>Feellipe Muniz</h3>
+        <p class="role">Vendas & Relacionamento</p>
+        <p>Um comunicador nato. Cuida com empatia das conexões entre pessoas e empresas, mostrando que acessibilidade também é sobre proximidade humana.</p>
+      </article>
+
+      <article class="card">
+        <img src="{{ url_for('equipe.static', filename='img/ingredy.png') }}" alt="Foto de Ingredy — Mídias e Marketing">
+        <h3>Ingredy Barroso</h3>
+        <p class="role">Mídias & Marketing</p>
+        <p>Cria pontes entre marcas e pessoas por meio de histórias visuais. Sua energia e sensibilidade tornam cada campanha leve, acolhedora e inspiradora.</p>
+      </article>
+
+      <article class="card">
+        <img src="{{ url_for('equipe.static', filename='img/erica.png') }}" alt="Foto de Erica — Estética e Bem-Estar">
+        <h3>Erica Barroso</h3>
+        <p class="role">Estética & Bem-Estar</p>
+        <p>Cuida da imagem e autoestima das pessoas, reforçando que acessibilidade também é se sentir bem consigo mesmo. Um olhar humano que enxerga beleza na diversidade.</p>
+      </article>
+
+      <article class="card">
+        <img src="{{ url_for('equipe.static', filename='img/julia.png') }}" alt="Foto de Julia — Sistemas">
+        <h3>Julia</h3>
+        <p class="role">Sistemas</p>
+        <p>Analítica, criativa e precisa. Constrói soluções robustas que tornam os sistemas mais inteligentes e acessíveis — o suporte técnico que dá segurança ao projeto.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

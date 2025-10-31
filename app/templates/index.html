@@ -1,0 +1,291 @@
+{# hackathon/app/templates/index.html #}
+{% extends "layout.html" %}
+{% block title %}Inconnect — Home{% endblock %}
+
+{# CSS específico da Home #}
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="home">
+<!-- =========================
+     HERO (com imagem estática)
+     ========================= -->
+<section class="hero" aria-label="Inconnect — Acessibilidade sem fricção">
+  <div class="hero-bg"></div>
+
+  <div class="overlay container">
+    <h1>Conectamos empresas a profissionais de acessibilidade — rápido, certo e com impacto.</h1>
+    <p>Pensamos em acessibilidade do planejamento à execução. A Inconnect contribui de forma criativa e correta para sua empresa ser mais acessível e inclusiva — e ainda vender mais.</p>
+    <div class="cta">
+      <a class="btn primary" href="/cadastro"><i data-feather="user-plus"></i> Cadastre-se</a>
+      <a class="btn ghost" href="/contato"><i data-feather="mail"></i> Fale com a gente</a>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- =========================
+       O QUE FAZEMOS
+       ========================= -->
+  <section class="what">
+    <div class="container">
+      <div class="head">
+        <h2 class="section-title">O que fazemos</h2>
+        <p class="sub">
+          Pensamos em acessibilidade do planejamento à execução.
+          A Inconnect contribui de forma criativa e correta para sua empresa ser mais acessível,
+          inclusiva e aumentar suas vendas.
+        </p>
+      </div>
+
+      <div class="grid">
+        <!-- 1. Cobertura de eventos -->
+        <article class="card">
+          <div class="ic"><i data-feather="calendar"></i></div>
+          <div>
+            <h3>Cobertura de eventos acessível</h3>
+            <p>
+              Planejamos e executamos Libras, legendagem e audiodescrição ao vivo.
+              Checklists, roteiros e testes técnicos garantem qualidade e conformidade legal.
+            </p>
+          </div>
+        </article>
+
+        <!-- 2. Capacitação de times -->
+        <article class="card">
+          <div class="ic"><i data-feather="users"></i></div>
+          <div>
+            <h3>Capacitação de times</h3>
+            <p>
+              Treinamos sua equipe em boas práticas: atendimento inclusivo, linguagem,
+              UX acessível e operação de recursos assistivos no dia a dia.
+            </p>
+          </div>
+        </article>
+
+        <!-- 3. Audiodescrição -->
+        <article class="card">
+          <div class="ic"><i data-feather="headphones"></i></div>
+          <div>
+            <h3>Audiodescrição</h3>
+            <p>
+              Roteiro, locução e mix final com especialistas.
+              Para vídeos, museus, campanhas e transmissões — experiência rica para pessoas cegas.
+            </p>
+          </div>
+        </article>
+
+        <!-- 4. Match empresa ↔ profissional -->
+        <article class="card">
+          <div class="ic"><i data-feather="link"></i></div>
+          <div>
+            <h3>Match empresa ↔ profissional</h3>
+            <p>
+              Conectamos sua demanda a intérpretes, audiodescritores e consultores verificados —
+              presencial ou remoto, no prazo e no orçamento.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+<!-- =========================
+     SLIDER CONTÍNUO — COLABORADORES APROVADOS
+     ========================= -->
+<section class="approved">
+  <div class="container">
+    <h2 class="section-title">
+      <i data-feather="check-square"></i> Colaboradores aprovados
+    </h2>
+  </div>
+
+  <div class="marquee">
+    <div class="track" id="track">
+      <!-- ===== PRIMEIRA DUPLICAÇÃO ===== -->
+      <div class="dupe">
+        <!-- 1 -->
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/clebson.jpg') }}" alt="Foto de Clebson José">
+          <div class="meta">
+            <div class="name">Clebson José</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial / Online</span>
+          </div>
+        </article>
+
+        <!-- 2 -->
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/thiago.jpg') }}" alt="Foto de Thiago Oliveira">
+          <div class="meta">
+            <div class="name">Thiago Oliveira</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial / Online</span>
+          </div>
+        </article>
+
+        <!-- 3 -->
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/valdir.jpg') }}" alt="Foto de Valdir Lima">
+          <div class="meta">
+            <div class="name">Valdir Lima</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial</span>
+          </div>
+        </article>
+
+        <!-- 4 -->
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/aline.jpg') }}" alt="Foto de Aline">
+          <div class="meta">
+            <div class="name">Aline</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial</span>
+          </div>
+        </article>
+
+        <!-- 5 -->
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/ianara.jpg') }}" alt="Foto de Ianara">
+          <div class="meta">
+            <div class="name">Ianara</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial / Online</span>
+          </div>
+        </article>
+
+        <!-- 6 -->
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/suille.jpg') }}" alt="Foto de Suille">
+          <div class="meta">
+            <div class="name">Suille</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial / Online</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- ===== SEGUNDA DUPLICAÇÃO (loop contínuo) ===== -->
+      <div class="dupe">
+        <!-- repete os mesmos 6 -->
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/clebson.jpg') }}" alt="Foto de Clebson José">
+          <div class="meta">
+            <div class="name">Clebson José</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial / Online</span>
+          </div>
+        </article>
+
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/thiago.jpg') }}" alt="Foto de Thiago Oliveira">
+          <div class="meta">
+            <div class="name">Thiago Oliveira</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial / Online</span>
+          </div>
+        </article>
+
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/valdir.jpg') }}" alt="Foto de Valdir Lima">
+          <div class="meta">
+            <div class="name">Valdir Lima</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial</span>
+          </div>
+        </article>
+
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/aline.jpg') }}" alt="Foto de Aline">
+          <div class="meta">
+            <div class="name">Aline</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial</span>
+          </div>
+        </article>
+
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/ianara.jpg') }}" alt="Foto de Ianara">
+          <div class="meta">
+            <div class="name">Ianara</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial / Online</span>
+          </div>
+        </article>
+
+        <article class="person">
+          <img src="{{ url_for('static', filename='img/people/suille.jpg') }}" alt="Foto de Suille">
+          <div class="meta">
+            <div class="name">Suille</div>
+            <div class="role">Intérprete</div>
+            <span class="tag">Presencial / Online</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <!-- =========================
+       MURAL DE LOGOS
+       ========================= -->
+  <section class="logos">
+    <div class="container">
+      <h2 class="section-title">Empresas conectadas pela Inconnect</h2>
+      <p class="section-sub">Algumas organizações que se cadastraram e permitiram divulgação.</p>
+      <div class="wall">
+        <div class="brand"><img src="{{ url_for('static', filename='img/logos/acresc.png') }}" alt="ACRESC"></div>
+
+      </div>
+    </div>
+  </section>
+<!-- =========================
+     DEPOIMENTOS (IMAGEM)
+     ========================= -->
+<section class="testi">
+  <div class="container">
+    <h2 class="section-title">Depoimentos</h2>
+    <p class="section-sub">Veja quem já transformou sua comunicação com acessibilidade.</p>
+
+    <div class="wrap">
+      <div class="stage">
+        <!-- Slides -->
+        <div class="slides" id="slides">
+          <img class="active" src="{{ url_for('static', filename='img/testi/depo1.png') }}" alt="Depoimento 1">
+          <img src="{{ url_for('static', filename='img/testi/depo2.png') }}" alt="Depoimento 2">
+        </div>
+
+        <!-- Navegação -->
+        <div class="nav">
+          <button type="button" id="prevT" aria-label="Anterior">
+            <i data-feather="chevron-left"></i>
+          </button>
+          <button type="button" id="nextT" aria-label="Próximo">
+            <i data-feather="chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</div>
+{% endblock %}
+
+{# JS específico da Home #}
+{% block scripts_extra %}
+  <!-- Feather Icons + Home JS -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.feather && typeof feather.replace === "function") feather.replace();
+    });
+  </script>
+  <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
+{% endblock %}

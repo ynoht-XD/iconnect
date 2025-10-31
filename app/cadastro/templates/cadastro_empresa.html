@@ -1,0 +1,474 @@
+{% extends "layout.html" %}
+{% block title %}Cadastro de Empresa · InovaAcess{% endblock %}
+
+{% block head_extra %}
+<style>
+  :root{
+    --primary:#378297; --primary-600:#2e6c79; --accent:#42b5a3;
+    --bg:#f8fafc; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
+    --radius:16px; --shadow:0 16px 48px rgba(2,6,23,.10);
+  }
+  .page-empresa{max-width:1000px;margin:40px auto 80px;padding:0 18px;color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+  .hero{position:relative;text-align:center;padding:48px 16px 28px;}
+  .hero h1{font-size:clamp(1.6rem,2.8vw,2.2rem);margin:0 0 6px}
+  .hero p{color:var(--muted);margin:0}
+  .circle{position:absolute;inset:auto 50% -70px;transform:translateX(50%);width:560px;height:560px;border-radius:50%;
+    background:radial-gradient(circle,var(--primary) 0%,transparent 66%);opacity:.10;filter:blur(60px);pointer-events:none;}
+
+  /* Card container */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .steps-head{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:16px;border-bottom:1px solid var(--line);background:#fff}
+  .steps-head .dot{flex:1 1 120px;display:flex;align-items:center;gap:10px}
+  .dot .b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;
+    background:#e2eef1;color:#244b53}
+  .dot.active .b{background:var(--primary);color:#fff}
+  .dot.done .b{background:var(--accent);color:#00352f}
+  .dot span{font-size:.95rem;color:#3b5560}
+  .dot.active span{color:#0f2d35;font-weight:600}
+
+  .steps{padding:22px}
+  .step{display:none;animation:fadeIn .36s ease}
+  .step.on{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Fields */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media (max-width:900px){.grid,.grid-3{grid-template-columns:1fr}}
+  label.field{display:flex;flex-direction:column;gap:8px;text-align:left}
+  .field span{font-size:.95rem;color:#244b53}
+  .field input,.field select,.field textarea{
+    border:2px solid #dbe7ea;border-radius:12px;padding:12px 14px;font-size:1rem;background:#fff;transition:.25s;
+  }
+  .field textarea{min-height:110px;resize:vertical}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(55,130,151,.18)}
+
+  /* Choice buttons / chips */
+  .choices{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{border:2px solid #dbe7ea;border-radius:999px;padding:10px 14px;font-weight:600;color:#244b53;background:#fff;cursor:pointer;transition:.25s}
+  .chip[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:#fff}
+  .chip:focus-visible{outline:3px solid rgba(55,130,151,.35);outline-offset:2px}
+
+  /* Cards answer (Yes/No) */
+  .yn{display:flex;gap:12px;flex-wrap:wrap}
+  .yn .btn{
+    border:2px solid #dbe7ea;background:#fff;color:#08242a;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;transition:.25s
+  }
+  .yn .btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
+  .yn .btn:hover{transform:translateY(-2px)}
+  .yn .btn:focus-visible{outline:3px solid rgba(55,130,151,.35);outline-offset:2px}
+
+  /* Actions */
+  .actions{display:flex;justify-content:space-between;gap:12px;margin-top:12px}
+  .actions .left{display:flex;gap:8px}
+  .btn-ghost,.btn-primary{
+    border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;border:2px solid transparent;transition:.25s
+  }
+  .btn-ghost{border-color:#cfe1e6;background:#f6fbfc;color:#2b4d56}
+  .btn-ghost:hover{background:#eaf6f9}
+  .btn-primary{background:var(--primary);color:#fff}
+  .btn-primary[disabled]{opacity:.5;cursor:not-allowed}
+  .btn-primary:hover:not([disabled]){background:var(--primary-600);transform:translateY(-1px)}
+
+  /* Mini helper / tip */
+  .tip{font-size:.9rem;color:#486b75}
+
+  /* Review */
+  .review{background:#f6fbfc;border:1px dashed #cfe1e6;border-radius:12px;padding:14px}
+  .review b{color:#16343c}
+
+  /* Toast (não usado no redirecionamento, mantido caso queira alternar) */
+  .toast{margin-top:18px;background:#d1fae5;color:#065f46;border-radius:12px;padding:14px;display:none}
+  .toast.on{display:block;animation:fadeIn .3s ease}
+
+  /* footer links */
+  .foot-links{margin:22px 0 0;text-align:center}
+  .foot-links a{color:var(--primary-600);font-weight:700;text-decoration:none}
+  .foot-links a:hover{color:var(--accent)}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-empresa" aria-labelledby="title">
+  <div class="hero">
+    <h1 id="title">Cadastro de Empresa / Projeto / Evento</h1>
+    <p>Responda rapidinho; as perguntas aparecem conforme você avança. ✨</p>
+    <div class="circle" aria-hidden="true"></div>
+  </div>
+
+  <div class="card" role="region" aria-label="Formulário de cadastro empresarial">
+    <!-- Cabeçalho das etapas -->
+    <div class="steps-head" aria-hidden="true">
+      <div class="dot active" data-step-dot="1"><div class="b">1</div><span>Básico</span></div>
+      <div class="dot" data-step-dot="2"><div class="b">2</div><span>É evento?</span></div>
+      <div class="dot" data-step-dot="3"><div class="b">3</div><span>Acessibilidade</span></div>
+      <div class="dot" data-step-dot="4"><div class="b">4</div><span>Público</span></div>
+      <div class="dot" data-step-dot="5"><div class="b">5</div><span>Agenda & Orçamento</span></div>
+      <div class="dot" data-step-dot="6"><div class="b">6</div><span>Revisão</span></div>
+    </div>
+
+    <form id="frmEmpresa" class="steps" novalidate>
+      <!-- STEP 1: Básico -->
+      <div class="step on" data-step="1">
+        <div class="grid">
+          <label class="field">
+            <span>Empresa / Órgão / Projeto *</span>
+            <input name="empresa" required placeholder="Ex.: Oxetech / Prefeitura X" autocomplete="organization">
+          </label>
+          <label class="field">
+            <span>Responsável *</span>
+            <input name="responsavel" required placeholder="Seu nome completo" autocomplete="name">
+          </label>
+          <label class="field">
+            <span>E-mail *</span>
+            <input type="email" name="email" required placeholder="contato@empresa.com" autocomplete="email">
+          </label>
+          <label class="field">
+            <span>Telefone</span>
+            <input type="tel" name="telefone" placeholder="(00) 00000-0000" inputmode="tel" autocomplete="tel">
+          </label>
+        </div>
+        <div class="actions">
+          <div class="left"><button type="button" class="btn-ghost" data-prev disabled>Voltar</button></div>
+          <button type="button" class="btn-primary" data-next disabled>Continuar</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: É evento? -->
+      <div class="step" data-step="2">
+        <label class="field">
+          <span>Vai ter um evento?</span>
+          <div class="yn" role="radiogroup" aria-label="É um evento?">
+            <button type="button" class="btn" data-yn="sim" aria-pressed="false">Sim</button>
+            <button type="button" class="btn" data-yn="nao" aria-pressed="false">Não</button>
+          </div>
+          <small class="tip">Se não for evento, seguimos com acessibilidade para site, vídeo, treinamento etc.</small>
+        </label>
+
+        <div id="boxEvento" hidden style="margin-top:14px">
+          <div class="grid">
+            <label class="field">
+              <span>Nome do evento</span>
+              <input name="evento_nome" placeholder="Ex.: Tech Summit 2025">
+            </label>
+            <label class="field">
+              <span>Data prevista</span>
+              <input type="date" name="evento_data">
+            </label>
+            <label class="field">
+              <span>Cidade / Local</span>
+              <input name="evento_local" placeholder="Ex.: Centro de Convenções, Maceió">
+            </label>
+            <label class="field">
+              <span>Formato</span>
+              <select name="evento_formato">
+                <option value="" selected>Selecione…</option>
+                <option>Presencial</option>
+                <option>Online</option>
+                <option>Híbrido</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <div class="left"><button type="button" class="btn-ghost" data-prev>Voltar</button></div>
+          <button type="button" class="btn-primary" data-next disabled>Continuar</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Tipos de acessibilidade -->
+      <div class="step" data-step="3">
+        <label class="field">
+          <span>Que tipo de acessibilidade você precisa? *</span>
+          <div class="choices" id="chipsAcess">
+            <button type="button" class="chip" data-chip="Libras">Intérprete de Libras</button>
+            <button type="button" class="chip" data-chip="Audiodescricao">Audiodescrição</button>
+            <button type="button" class="chip" data-chip="Legenda">Legenda/Closed Caption</button>
+            <button type="button" class="chip" data-chip="AcessibilidadeWeb">Acessibilidade para Site/App</button>
+            <button type="button" class="chip" data-chip="Consultoria">Consultoria/Laudo de Acessibilidade</button>
+            <button type="button" class="chip" data-chip="Treinamento">Treinamento de Equipe</button>
+            <button type="button" class="chip" data-chip="Sinalizacao">Sinalização Inclusiva</button>
+            <button type="button" class="chip" data-chip="Outro">Outro</button>
+          </div>
+        </label>
+
+        <div id="boxOutro" class="field" hidden>
+          <span>Descreva o “Outro”</span>
+          <textarea name="acess_outro" placeholder="Ex.: audiodescrição para vídeos gravados + revisão de acessibilidade de slides"></textarea>
+        </div>
+
+        <div class="actions">
+          <div class="left"><button type="button" class="btn-ghost" data-prev>Voltar</button></div>
+          <button type="button" class="btn-primary" data-next disabled>Continuar</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Público -->
+      <div class="step" data-step="4">
+        <div class="grid">
+          <label class="field">
+            <span>Quantas pessoas você estima alcançar?</span>
+            <input type="number" name="estimativa_pessoas" min="1" placeholder="Ex.: 150">
+          </label>
+          <label class="field">
+            <span>Perfil predominante</span>
+            <select name="perfil_publico">
+              <option value="" selected>Selecione…</option>
+              <option>Geral</option>
+              <option>Servidor público</option>
+              <option>Acadêmico/Estudante</option>
+              <option>Corporativo</option>
+              <option>Outro</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field" style="margin-top:6px">
+          <span>Há foco em algum grupo específico?</span>
+          <div class="choices">
+            <button type="button" class="chip" data-chip="Auditiva">Pessoas surdas ou com deficiência auditiva</button>
+            <button type="button" class="chip" data-chip="Visual">Pessoas cegas ou com baixa visão</button>
+            <button type="button" class="chip" data-chip="Mobilidade">Pessoas com mobilidade reduzida</button>
+            <button type="button" class="chip" data-chip="Cognitiva">Acessibilidade cognitiva</button>
+          </div>
+        </label>
+
+        <div class="actions">
+          <div class="left"><button type="button" class="btn-ghost" data-prev>Voltar</button></div>
+          <button type="button" class="btn-primary" data-next>Continuar</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: Agenda & Orçamento -->
+      <div class="step" data-step="5">
+        <div class="grid">
+          <label class="field">
+            <span>Prazo desejado / Janela</span>
+            <input name="janela_prazo" placeholder="Ex.: até 25/11 ou janela 20–28/11">
+          </label>
+          <label class="field">
+            <span>Faixa de orçamento (opcional)</span>
+            <select name="orcamento">
+              <option value="" selected>Prefiro não informar</option>
+              <option>Até R$ 2.000</option>
+              <option>R$ 2.000 – R$ 5.000</option>
+              <option>R$ 5.000 – R$ 10.000</option>
+              <option>Acima de R$ 10.000</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Observações adicionais</span>
+          <textarea name="observacoes" placeholder="Links, arquivos, particularidades do local, horários, necessidades específicas…"></textarea>
+        </label>
+
+        <div class="actions">
+          <div class="left"><button type="button" class="btn-ghost" data-prev>Voltar</button></div>
+          <button type="button" class="btn-primary" data-next>Continuar</button>
+        </div>
+      </div>
+
+      <!-- STEP 6: Revisão e Envio -->
+      <div class="step" data-step="6">
+        <div class="review" id="reviewBox" aria-live="polite"></div>
+        <div class="actions">
+          <div class="left"><button type="button" class="btn-ghost" data-prev>Voltar</button></div>
+          <button type="submit" class="btn-primary">Enviar pedido</button>
+        </div>
+        <!-- toast mantido como fallback, mas fluxo padrão é redirecionar pra /cadastro -->
+        <div class="toast" id="toastOk" role="status" aria-live="polite">✅ Recebemos seu pedido! Nossa equipe entrará em contato em breve.</div>
+        <div class="foot-links">
+          <a href="{{ url_for('cadastro.cadastro_home') }}">Voltar para as opções</a>
+        </div>
+      </div>
+
+      <!-- Campos ocultos que guardam escolhas -->
+      <input type="hidden" name="eh_evento" id="eh_evento">
+      <input type="hidden" name="tipos_acessibilidade" id="tipos_acessibilidade">
+      <input type="hidden" name="grupos_foco" id="grupos_foco">
+    </form>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+  (function(){
+    const $ = (sel, root=document)=>root.querySelector(sel);
+    const $$ = (sel, root=document)=>Array.from(root.querySelectorAll(sel));
+    const form = $("#frmEmpresa");
+
+    // State
+    const state = {
+      step: 1,
+      total: 6,
+      chipsAcess: new Set(),
+      chipsFoco: new Set(),
+      evento: null
+    };
+
+    // Helpers
+    function setStep(n){
+      state.step = Math.max(1, Math.min(state.total, n));
+      $$(".step").forEach(s => s.classList.toggle("on", s.dataset.step == state.step));
+      $$(".steps-head .dot").forEach(d => {
+        const i = +d.dataset.stepDot;
+        d.classList.toggle("active", i === state.step);
+        d.classList.toggle("done", i < state.step);
+      });
+      validateStep();
+      if(state.step===6) renderReview();
+    }
+
+    function next(){ setStep(state.step+1); }
+    function prev(){ setStep(state.step-1); }
+
+    function requiredFilled(selectors, root){
+      return selectors.every(s=>{
+        const el = $(s, root||document);
+        if(!el) return true;
+        if(el.type === "email") return el.value.trim() && /.+@.+\..+/.test(el.value.trim());
+        return el.value && el.value.trim().length>0;
+      });
+    }
+
+    function validateStep(){
+      const cur = $(`.step[data-step="${state.step}"]`);
+      const btnNext = cur?.querySelector("[data-next]");
+      const btnPrev = cur?.querySelector("[data-prev]");
+      if(btnPrev) btnPrev.disabled = state.step===1;
+
+      let ok = true;
+      if(state.step===1){
+        ok = requiredFilled(['[name="empresa"]','[name="responsavel"]','[name="email"]'], cur);
+      } else if(state.step===2){
+        ok = state.evento !== null; // precisa escolher sim/não
+      } else if(state.step===3){
+        ok = state.chipsAcess.size>0;
+      } else {
+        ok = true;
+      }
+      if(btnNext) btnNext.disabled = !ok;
+    }
+
+    function syncHidden(){
+      $("#eh_evento").value = state.evento===null ? "" : (state.evento ? "sim":"nao");
+      $("#tipos_acessibilidade").value = JSON.stringify(Array.from(state.chipsAcess));
+      $("#grupos_foco").value = JSON.stringify(Array.from(state.chipsFoco));
+    }
+
+    // Eventos globais
+    document.addEventListener("input", (e)=>{
+      if(e.target.closest('[data-step="1"]')) validateStep();
+    });
+
+    // Step 1 botões
+    $$("[data-next]").forEach(b=> b.addEventListener("click", ()=>{ syncHidden(); next(); }));
+    $$("[data-prev]").forEach(b=> b.addEventListener("click", ()=>{ prev(); }));
+
+    // Step 2 (evento sim/não)
+    $$('.yn .btn').forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        $$('.yn .btn').forEach(b=>{ b.classList.remove("active"); b.setAttribute("aria-pressed","false"); });
+        btn.classList.add("active"); btn.setAttribute("aria-pressed","true");
+        state.evento = btn.dataset.yn === "sim";
+        $("#boxEvento").hidden = !state.evento;
+        validateStep();
+      });
+    });
+
+    // Step 3 (chips de acessibilidade)
+    $("#chipsAcess")?.addEventListener("click", (e)=>{
+      const chip = e.target.closest(".chip");
+      if(!chip) return;
+      const val = chip.dataset.chip;
+      const pressed = chip.getAttribute("aria-pressed")==="true";
+      if(pressed){
+        chip.setAttribute("aria-pressed","false");
+        chip.classList.remove("on");
+        state.chipsAcess.delete(val);
+      } else {
+        chip.setAttribute("aria-pressed","true");
+        chip.classList.add("on");
+        state.chipsAcess.add(val);
+      }
+      $("#boxOutro").hidden = !state.chipsAcess.has("Outro");
+      validateStep();
+    });
+
+    // Step 4 (chips de grupos de foco)
+    document.querySelectorAll('[data-step="4"] .chip').forEach(ch=>{
+      ch.addEventListener("click", ()=>{
+        const val = ch.dataset.chip;
+        const pressed = ch.getAttribute("aria-pressed")==="true";
+        if(pressed){
+          ch.setAttribute("aria-pressed","false");
+          state.chipsFoco.delete(val);
+        } else {
+          ch.setAttribute("aria-pressed","true");
+          state.chipsFoco.add(val);
+        }
+      });
+    });
+
+    // Render revisão
+    function renderReview(){
+      const data = Object.fromEntries(new FormData(form));
+      const acess = Array.from(state.chipsAcess).join(", ") || "—";
+      const foco  = Array.from(state.chipsFoco).join(", ") || "—";
+      const evt   = state.evento===null ? "—" : (state.evento ? "Sim" : "Não");
+      const html = `
+        <p><b>Empresa/Projeto:</b> ${data.empresa||"—"} · <b>Responsável:</b> ${data.responsavel||"—"}</p>
+        <p><b>E-mail:</b> ${data.email||"—"} · <b>Telefone:</b> ${data.telefone||"—"}</p>
+        <p><b>É evento?</b> ${evt}</p>
+        ${state.evento ? `
+          <p><b>Evento:</b> ${data.evento_nome||"—"} · <b>Data:</b> ${data.evento_data||"—"} · <b>Local:</b> ${data.evento_local||"—"} · <b>Formato:</b> ${data.evento_formato||"—"}</p>
+        `: ``}
+        <p><b>Acessibilidade:</b> ${acess}${state.chipsAcess.has("Outro") && data.acess_outro ? ` — <i>${data.acess_outro}</i>`:""}</p>
+        <p><b>Estimativa de público:</b> ${data.estimativa_pessoas||"—"} · <b>Perfil:</b> ${data.perfil_publico||"—"}</p>
+        <p><b>Foco:</b> ${foco}</p>
+        <p><b>Janela/Prazo:</b> ${data.janela_prazo||"—"} · <b>Orçamento:</b> ${data.orcamento||"—"}</p>
+        <p><b>Observações:</b> ${data.observacoes||"—"}</p>
+      `;
+      $("#reviewBox").innerHTML = html;
+    }
+
+    // Submit => salva flag e REDIRECIONA para /cadastro com confete/modal lá
+    form.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      syncHidden();
+
+      // Se quiser enviar ao backend, descomente:
+      // const payload = Object.fromEntries(new FormData(form));
+      // await fetch("/api/cadastro/empresa", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(payload) });
+
+      // Marca sucesso para a home de cadastro exibir modal + confete
+      try {
+        const data = Object.fromEntries(new FormData(form));
+        localStorage.setItem("cadastro_ok", JSON.stringify({
+          tipo: "empresa",
+          nome: data.responsavel || "",
+          empresa: data.empresa || "",
+          ts: Date.now()
+        }));
+      } catch(_) {}
+
+      // Redireciona para a home de cadastro
+      window.location.href = "{{ url_for('cadastro.cadastro_home') }}?ok=1";
+    });
+
+    // Inicial
+    setStep(1);
+
+    // Acessibilidade: Enter ativa chip focado
+    document.addEventListener("keydown",(e)=>{
+      if(e.key==="Enter" && document.activeElement?.classList.contains("chip")){
+        e.preventDefault();
+        document.activeElement.click();
+      }
+    });
+  })();
+</script>
+{% endblock %}

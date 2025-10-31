@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block title %}Soluções · Inconnect{% endblock %}
+
+{% block head_extra %}
+  <!-- CSS específico do módulo -->
+  <link rel="stylesheet" href="{{ url_for('solucoes.static', filename='css/solucoes.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="solucoes-hero">
+  <div class="container">
+    <h1>Nossas Soluções de Acessibilidade</h1>
+    <p>Serviços profissionais para tornar seu conteúdo e suas operações inclusivas — do planejamento à execução.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="{{ url_for('cadastro.cadastro_home') }}">Cadastrar minha empresa</a>
+      <a class="btn ghost" href="{{ url_for('cadastro.cadastro_home') }}">Falar com um especialista</a>
+    </div>
+  </div>
+</section>
+
+<section class="solucoes-grid section">
+  <div class="container">
+    <h2>O que oferecemos</h2>
+    <p>Escolha a solução ideal para sua necessidade. Podemos combinar serviços em um pacote sob medida.</p>
+
+    <div class="cards">
+      <!-- Card 1 -->
+      <article class="card">
+        <header>
+          <h3>Áudio-descrição</h3>
+          <p class="sub">Para vídeos, eventos e materiais institucionais</p>
+        </header>
+        <p>Roteiro e locução profissionais seguindo boas práticas (ABNT, WCAG), garantindo compreensão para pessoas cegas e com baixa visão.</p>
+        <footer>
+          <a class="btn" href="{{ url_for('cadastro.cadastro_home') }}">Solicitar proposta</a>
+        </footer>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card">
+        <header>
+          <h3>Interpretação em Libras</h3>
+          <p class="sub">Ao vivo e sob demanda</p>
+        </header>
+        <p>Intérpretes certificados para transmissões, reuniões corporativas, treinamentos e conteúdos gravados.</p>
+        <footer>
+          <a class="btn" href="{{ url_for('cadastro.cadastro_home') }}">Solicitar proposta</a>
+        </footer>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card">
+        <header>
+          <h3>Treinamentos & Capacitação</h3>
+          <p class="sub">Times conscientes e eficientes</p>
+        </header>
+        <p>Workshops práticos para squads, RH e comunicação, com material didático e exercícios guiados.</p>
+        <footer>
+          <a class="btn" href="{{ url_for('cadastro.cadastro_home') }}">Solicitar proposta</a>
+        </footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cta-bar section">
+  <div class="container">
+    <h2>Pronto para avançar?</h2>
+    <p>Cadastre sua empresa e receba um diagnóstico inicial gratuito.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="{{ url_for('cadastro.cadastro_home') }}">Cadastrar empresa</a>
+      <a class="btn ghost" href="{{ url_for('cadastro.cadastro_home') }}">Falar com a equipe</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts_extra %}
+  <script src="{{ url_for('solucoes.static', filename='js/solucoes.js') }}" defer></script>
+{% endblock %}

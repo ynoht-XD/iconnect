@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+{% block title %}Contato · Inconnect{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('contato.static', filename='css/contato.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="contato-hero">
+  <div class="container">
+    <h1>Fale Conosco</h1>
+    <p>Entre em contato com a equipe Inconnect — estamos prontos para ajudar sua empresa a ser mais acessível e inclusiva.</p>
+  </div>
+</section>
+
+<section class="contato-grid">
+  <div class="container">
+    <div class="info">
+      <h2>Informações de Contato</h2>
+      <p>Você pode falar conosco diretamente por telefone, e-mail ou enviando uma mensagem pelo formulário.</p>
+
+      <ul class="contact-list">
+        <li><strong>Telefone:</strong> (82) 9 8754-6799</li>
+        <li><strong>E-mail:</strong> <a href="mailto:inconnect@gmail.com">inconnect@gmail.com</a></li>
+      </ul>
+    </div>
+
+    <div class="formulario">
+      <h2>Envie sua Mensagem</h2>
+      <form id="formContato" method="POST" action="{{ url_for('contato.contato_enviar') }}">
+        <label>
+          <span>Nome completo *</span>
+          <input type="text" name="nome" required placeholder="Seu nome completo">
+        </label>
+
+        <label>
+          <span>E-mail *</span>
+          <input type="email" name="email" required placeholder="seuemail@exemplo.com">
+        </label>
+
+        <label>
+          <span>Assunto *</span>
+          <input type="text" name="assunto" required placeholder="Assunto da mensagem">
+        </label>
+
+        <label>
+          <span>Mensagem *</span>
+          <textarea name="mensagem" required rows="5" placeholder="Digite sua mensagem aqui..."></textarea>
+        </label>
+
+        <button type="submit" class="btn primary">Enviar Mensagem</button>
+        <p class="feedback" hidden></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="container">
+    <h2>Perguntas Frequentes</h2>
+    <div class="faq-list">
+
+      <!-- BLOCO 1 — SERVIÇOS -->
+      <details>
+        <summary>Quais serviços de acessibilidade vocês oferecem?</summary>
+        <p>Trabalhamos com <strong>audiodescrição</strong>, <strong>interpretação em Libras</strong> e <strong>treinamentos em acessibilidade</strong>.  
+        Nossos serviços seguem boas práticas da ABNT e da Lei Brasileira de Inclusão.</p>
+      </details>
+
+      <!-- BLOCO 2 — ATENDIMENTO -->
+      <details>
+        <summary>Vocês atendem empresas de todo o Brasil?</summary>
+        <p>Sim. Oferecemos atendimento remoto e híbrido, com profissionais disponíveis em todos os estados do país.</p>
+      </details>
+
+      <details>
+        <summary>Como funciona o processo de contratação?</summary>
+        <p>Após o envio do formulário ou contato por telefone, nossa equipe agenda uma reunião rápida para entender suas necessidades e preparar uma proposta personalizada.</p>
+      </details>
+
+      <!-- BLOCO 3 — PROFISSIONAIS -->
+      <details>
+        <summary>Sou profissional de acessibilidade. Posso me cadastrar?</summary>
+        <p>Com certeza! Se você atua com Libras, audiodescrição ou inclusão digital, cadastre-se na página de <a href="{{ url_for('cadastro.cadastro_home') }}">cadastro</a> para participar dos nossos projetos.</p>
+      </details>
+
+      <!-- BLOCO 4 — PRAZOS -->
+      <details>
+        <summary>Em quanto tempo receberei uma resposta?</summary>
+        <p>Respondemos normalmente em até <strong>24 horas úteis</strong>.  
+        Se for algo urgente, entre em contato diretamente pelo telefone.</p>
+      </details>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts_extra %}
+<script src="{{ url_for('contato.static', filename='js/contato.js') }}" defer></script>
+{% endblock %}

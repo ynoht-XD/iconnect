@@ -1,0 +1,183 @@
+{% extends "layout.html" %}
+{% block title %}Cadastro · InovaAcess{% endblock %}
+
+{# força tema claro só nesta página #}
+{% block body_class %}force-light{% endblock %}
+
+{% block head_extra %}
+  <!-- CSS específico do módulo Cadastro -->
+  <link rel="stylesheet" href="{{ url_for('cadastro.static', filename='css/cadastro.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="cadastro-page" aria-labelledby="cadastro-title">
+  <div class="container">
+    <!-- HERO DE ESCOLHA (com backdrop circular) -->
+    <header class="cadastro-hero">
+      <div class="circle-backdrop" aria-hidden="true"></div>
+
+      <div class="hero-content">
+        <h1 class="page-title" id="cadastro-title">Como você quer se cadastrar?</h1>
+        <p class="page-subtitle">Escolha a opção que melhor se encaixa no seu objetivo.</p>
+
+        <div class="choice-grid" role="group" aria-label="Escolha de tipo de cadastro">
+          <!-- CARD EMPRESA -->
+          <a class="choice-card choice-empresa"
+             href="{{ url_for('cadastro.cadastro_empresa') }}"
+             aria-label="Cadastro para empresa, projeto ou evento">
+            <div class="choice-icon" aria-hidden="true">
+              <!-- Prédio -->
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 21h18M6 21V5a2 2 0 0 1 2-2h5l5 5v13"/>
+                <path d="M14 3v4h4"/>
+                <path d="M9 9h1M12 9h1M9 12h1M12 12h1M9 15h1M12 15h1"/>
+              </svg>
+            </div>
+            <div class="choice-text">
+              <h2>Empresa / Projeto / Evento</h2>
+              <p>Está precisando de <strong>acessibilidade</strong> na sua empresa, projeto ou evento? Conte conosco! Vamos te ajudar — faça já seu cadastro.</p>
+            </div>
+            <span class="choice-cta">Começar agora</span>
+          </a>
+
+          <!-- CARD COLABORADOR -->
+          <a class="choice-card choice-colab"
+             href="{{ url_for('cadastro.cadastro_colaborador') }}"
+             aria-label="Cadastro para colaborador ou freelancer">
+            <div class="choice-icon" aria-hidden="true">
+              <!-- Dois bonecos -->
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
+                <path d="M7 14a4 4 0 1 0-4-4"/>
+                <path d="M22 21v-2a4 4 0 0 0-4-4h-4a4 4 0 0 0-4 4v2"/>
+                <path d="M3 21v-2a4 4 0 0 1 4-4h1"/>
+              </svg>
+            </div>
+            <div class="choice-text">
+              <h2>Colaborador / Freelancer</h2>
+              <p>Quer se juntar à equipe? Que tal trabalhar como <strong>freelancer</strong>, cobrir eventos ou auxiliar em projetos? Seja um colaborador!</p>
+            </div>
+            <span class="choice-cta">Quero fazer parte</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- FORM RÁPIDO (opcional) -->
+    <section class="cadastro-rapido" aria-labelledby="rapido-title">
+      <h3 id="rapido-title">Prefere começar pelo formulário rápido?</h3>
+      <p>Deixe seus dados e retornaremos para orientar o melhor caminho.</p>
+
+      <form id="form-cadastro" class="cadastro-form" novalidate>
+        <label class="field">
+          <span>Nome completo</span>
+          <input type="text" name="nome" placeholder="Ex.: Ana Beatriz Souza" autocomplete="name" required>
+        </label>
+
+        <label class="field">
+          <span>E-mail</span>
+          <input type="email" name="email" placeholder="Ex.: ana@email.com" autocomplete="email" required>
+        </label>
+
+        <label class="field">
+          <span>Telefone</span>
+          <input type="tel" name="telefone" placeholder="(00) 00000-0000" inputmode="tel" autocomplete="tel">
+        </label>
+
+        <div class="actions">
+          <button type="submit" class="btn primary">Enviar</button>
+          <a class="btn ghost" href="{{ url_for('cadastro.cadastro_empresa') }}">Sou empresa</a>
+          <a class="btn ghost" href="{{ url_for('cadastro.cadastro_colaborador') }}">Sou colaborador</a>
+        </div>
+      </form>
+
+      <div id="cadastro-feedback" class="cadastro-feedback" hidden>
+        <p>✅ Cadastro enviado com sucesso! Em breve entraremos em contato.</p>
+      </div>
+    </section>
+
+    <!-- LINKS DIRETOS (fallback/SEO interno) -->
+    <nav class="links-diretos" aria-label="Links diretos para tipos de cadastro">
+      <ul>
+        <li><a href="{{ url_for('cadastro.cadastro_empresa') }}">Ir para cadastro de empresa</a></li>
+        <li><a href="{{ url_for('cadastro.cadastro_colaborador') }}">Ir para cadastro de colaborador</a></li>
+      </ul>
+    </nav>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts_extra %}
+  <!-- JS específico do módulo Cadastro -->
+  <script src="{{ url_for('cadastro.static', filename='js/cadastro.js') }}" defer></script>
+
+  <!-- Confete + Modal pós-cadastro (acionado por localStorage e query ?ok=1) -->
+  <script>
+  (function(){
+    const ok = new URLSearchParams(location.search).get("ok");
+    let payload = null;
+    try { payload = JSON.parse(localStorage.getItem("cadastro_ok") || "null"); } catch(_) {}
+
+    if(ok && payload){
+      const wrap = document.createElement("div");
+      wrap.setAttribute("role","dialog");
+      wrap.setAttribute("aria-modal","true");
+      wrap.style.position="fixed"; wrap.style.inset="0"; wrap.style.background="rgba(8,15,23,.55)";
+      wrap.style.display="grid"; wrap.style.placeItems="center"; wrap.style.zIndex="9999";
+
+      const card = document.createElement("div");
+      card.style.background="#fff"; card.style.color="#0f172a"; card.style.borderRadius="16px";
+      card.style.boxShadow="0 20px 60px rgba(2,6,23,.25)"; card.style.padding="26px 22px"; card.style.width="min(520px,92vw)";
+      const empresaTxt = payload.empresa ? ` da <b>${payload.empresa}</b>` : "";
+      card.innerHTML = `
+        <h3 style="margin:0 0 6px;font-size:1.3rem">Inscrição recebida! 🎉</h3>
+        <p style="margin:0 0 8px;color:#475569">Valeu ${payload.nome?('<b>'+payload.nome+'</b>'):''}${empresaTxt}! Em breve nossa equipe entrará em contato.</p>
+        <p style="margin:0 0 14px;color:#64748b">Enquanto isso, fique à vontade para explorar nossas soluções.</p>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button id="okModal" style="border:2px solid #378297;background:#378297;color:#fff;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer">Fechar</button>
+        </div>
+      `;
+
+      // canvas confete
+      const canvas = document.createElement("canvas");
+      canvas.width = innerWidth; canvas.height = innerHeight;
+      canvas.style.position="fixed"; canvas.style.inset="0"; canvas.style.pointerEvents="none"; canvas.style.zIndex="9998";
+      const ctx = canvas.getContext("2d");
+      const pieces = Array.from({length:180}).map(() => ({
+        x: Math.random()*canvas.width,
+        y: -20 - Math.random()*canvas.height*0.5,
+        r: 6+Math.random()*6,
+        s: 2+Math.random()*3,
+        a: Math.random()*Math.PI*2,
+        c: `hsl(${Math.floor(Math.random()*360)},90%,60%)`
+      }));
+      let running = true;
+      function tick(){
+        if(!running) return;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        pieces.forEach(p=>{
+          p.y += p.s;
+          p.x += Math.sin(p.a+=0.03);
+          if(p.y>canvas.height+20){ p.y=-20; p.x=Math.random()*canvas.width; }
+          ctx.fillStyle=p.c; ctx.beginPath();
+          ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+        });
+        requestAnimationFrame(tick);
+      }
+      tick();
+
+      wrap.appendChild(card);
+      document.body.append(canvas, wrap);
+
+      const close = () => {
+        running=false; wrap.remove(); canvas.remove();
+        try { localStorage.removeItem("cadastro_ok"); } catch(_) {}
+        const u = new URL(location.href); u.searchParams.delete("ok"); history.replaceState(null,"",u.toString());
+      };
+      document.getElementById("okModal").onclick = close;
+      wrap.addEventListener("click", (e)=>{ if(e.target===wrap) close(); });
+      document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") close(); });
+    }
+  })();
+  </script>
+{% endblock %}

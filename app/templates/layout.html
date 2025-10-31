@@ -1,0 +1,136 @@
+{# templates/layout.html #}
+<!DOCTYPE html>
+<html lang="pt-BR" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Inconnect — Acessibilidade e Inclusão{% endblock %}</title>
+
+  <!-- Manifest & meta básicos -->
+  <meta name="theme-color" content="#378297" />
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" />
+
+  <!-- CSS principal global -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}" />
+
+  {# Bloco para CSS adicionais por página (ex: home.css) #}
+  {% block head_extra %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- ===== Header / Topbar ===== -->
+  <header class="topbar" role="banner">
+    <div class="container">
+      <!-- Marca / Logo à esquerda -->
+      <a class="brand" href="{{ url_for('core.index') }}" aria-label="Página inicial">
+        <span class="brand-mark" aria-hidden="true">IN</span>
+        <span class="brand-name">Inconnect</span>
+      </a>
+
+      <!-- Botão hambúrguer (mobile) -->
+      <button
+        class="nav-toggle"
+        id="nav-toggle"
+        aria-controls="main-navigation"
+        aria-expanded="false"
+        aria-label="Abrir menu"
+      >
+        <span class="burger" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <span class="sr-only">Menu</span>
+      </button>
+
+      <!-- Navegação principal (drawer à direita, 75%) -->
+      <nav
+        id="main-navigation"
+        class="nav"
+        role="navigation"
+        aria-label="Principal"
+        data-state="closed"
+      >
+        <ul class="nav-list">
+          <li><a href="{{ url_for('solucoes.home') }}">Soluções</a></li>
+          <li><a href="{{ url_for('core.index') }}">Home</a></li>
+          <li><a href="{{ url_for('equipe.equipe_home') }}">Equipe</a></li>
+          <li><a href="{{ url_for('contato.contato_home') }}">Contato</a></li>
+          <li class="cta"><a href="{{ url_for('cadastro.cadastro_home') }}">Cadastre-se</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Drawer Mobile (overlay/fechamento) ===== -->
+  <div class="nav-overlay" data-js="nav-overlay" hidden></div>
+
+  <!-- ===== Conteúdo principal ===== -->
+  <main id="conteudo" class="page">
+    {% block content %}
+    <!-- ===== Hero padrão (fallback) ===== -->
+    <section class="hero">
+      <div class="container">
+        <h1>Acessibilidade que gera oportunidade</h1>
+        <p>Conectamos empresas e talentos por meio de soluções inclusivas, eficientes e escaláveis.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="{{ url_for('cadastro.cadastro_home') }}">Começar agora</a>
+          <a class="btn ghost" href="{{ url_for('solucoes.home') }}">Ver soluções</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Sessões padrão de fallback ===== -->
+    <section id="vagas" class="section">
+      <div class="container">
+        <h2>Vagas</h2>
+        <p>Encontre oportunidades com acessibilidade garantida.</p>
+      </div>
+    </section>
+
+    <section id="sobre-nos" class="section">
+      <div class="container">
+        <h2>Equipe</h2>
+        <p>Conheça as pessoas por trás do Inconnect e nossa cultura orientada a impacto e inclusão.</p>
+        <p style="text-align:center; margin-top:10px;">
+          <a class="btn" href="{{ url_for('equipe.equipe_home') }}">Conhecer a equipe</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="contato" class="section">
+      <div class="container">
+        <h2>Contato</h2>
+        <p>Fale com a equipe e tire dúvidas sobre integrações e projetos.</p>
+        <p><a class="btn" href="{{ url_for('contato.contato_home') }}">Ir para a página de Contato</a></p>
+      </div>
+    </section>
+    {% endblock %}
+  </main>
+
+  <!-- ===== Rodapé ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>© {{ 2025 }} Inconnect. Todos os direitos reservados.</p>
+      <nav class="footer-nav" aria-label="Rodapé">
+        <a href="#">Termos</a>
+        <a href="#">Privacidade</a>
+        <a href="{{ url_for('contato.contato_home') }}">Contato</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- ===== JS principal ===== -->
+  <script>
+    document.documentElement.classList.remove('no-js');
+  </script>
+  <script src="{{ url_for('static', filename='js/layout.js') }}" defer></script>
+
+  {# Bloco para scripts adicionais (por página) #}
+  {% block scripts_extra %}{% endblock %}
+</body>
+</html>
